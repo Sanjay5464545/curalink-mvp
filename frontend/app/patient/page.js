@@ -10,7 +10,7 @@ export default function PatientOnboarding() {
   const [error, setError] = useState("");
 
   const handleDetect = async (e) => {
-    e?.preventDefault?.();
+    e.preventDefault();
     if (!text.trim()) {
       setError("Please describe your condition or symptoms.");
       return;
@@ -19,9 +19,9 @@ export default function PatientOnboarding() {
     setLoading(true);
 
     try {
-      // Uses env var on Vercel, falls back to localhost for local dev
       const backendBase =
-        process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:4000";
+        process.env.NEXT_PUBLIC_BACKEND_URL ||
+        "https://curalink-mvp.onrender.com"; // ✅ your Render backend
 
       const res = await fetch(`${backendBase}/api/ai/parse-condition`, {
         method: "POST",
@@ -35,14 +35,11 @@ export default function PatientOnboarding() {
       }
 
       const data = await res.json();
-      // persist and navigate to dashboard
       localStorage.setItem("conditions", JSON.stringify(data.conditions || []));
       window.location.href = "/dashboard";
     } catch (err) {
       console.error("Detect error:", err);
-      setError(
-        "Failed to detect conditions. Make sure the backend is reachable and try again."
-      );
+      setError("Failed to connect to backend. Please try again later.");
     } finally {
       setLoading(false);
     }
@@ -59,11 +56,10 @@ export default function PatientOnboarding() {
             </h1>
             <p className="mt-2 text-sm text-slate-500 max-w-2xl">
               Describe symptoms or conditions in plain language — the AI will
-              extract likely conditions and suggest relevant clinical trials
-              and experts.
+              extract likely conditions and suggest relevant clinical trials and
+              experts.
             </p>
           </div>
-
           <div className="hidden md:flex items-center gap-4">
             <Link href="/" className="text-slate-600 hover:text-slate-900">
               Home
@@ -104,7 +100,7 @@ export default function PatientOnboarding() {
               </label>
 
               <div className="ml-auto text-xs text-slate-400">
-                Tip: include age, major diagnoses and main symptoms.
+                Tip: include age, major diagnoses, and main symptoms.
               </div>
             </div>
 
@@ -137,12 +133,11 @@ export default function PatientOnboarding() {
               <button
                 type="submit"
                 disabled={loading}
-                className={
-                  "inline-flex items-center gap-3 px-5 py-2 rounded-lg text-sm font-semibold " +
-                  (loading
+                className={`inline-flex items-center gap-3 px-5 py-2 rounded-lg text-sm font-semibold ${
+                  loading
                     ? "bg-slate-300 text-slate-700 cursor-not-allowed"
-                    : "bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow hover:scale-[1.01] transition")
-                }
+                    : "bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow hover:scale-[1.01] transition"
+                }`}
               >
                 {loading ? "Analyzing..." : "Detect Conditions"}
               </button>
