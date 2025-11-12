@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Use direct CSS instead of @apply to avoid PostCSS/Tailwind edge-cases */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: #f9fafb; /* light gray (tailwind bg-gray-50) */
+  color: #111827;            /* tailwind gray-900 */
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
